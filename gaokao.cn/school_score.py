@@ -40,16 +40,18 @@ def _get_province_school_score(year, province_id, school_id, type_id):
     response = requests.get(_url)
     if response.status_code != 200:
         print(response.status_code)
+        return None
     else:
-        print(response.json())
-    return _url
+        return response.json()
+    return None
     
 def _main():
     _schools = _get_schools()
     print("total schools %d" % len(_schools))
     _provinces = _get_provinces()
     _types = _get_provinces_types()
-    
+
+    _scores_array = []
     for _index, _p in enumerate(_provinces):
         _t = _types[_index]
         _ts = list(map(lambda x: x["id"], _t))
@@ -57,6 +59,13 @@ def _main():
             for _i_ts in _ts:
                 time.sleep(float(random.randint(300, 800))/1000.0)
                 _scores = _get_province_school_score(2022, _p, _s, _i_ts)
+                if _scores:
+                    _scores_array.append(_scores)
+
+    f = open("school_scores.json", "w")
+    f.write(json.dumps(_scores_array, indent=2, ensure_ascii=False))
+    f.close()
+    
     return
 
 if __name__ == "__main__":
