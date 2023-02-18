@@ -36,14 +36,20 @@ def _get_provinces_types():
 def _get_province_school_score(year, province_id, school_id, type_id):
     _url = "https://static-data.gaokao.cn/www/2.0/schoolprovinceindex/%s/%s/%s/%s/1.json" % (year, school_id, province_id, type_id)
 
+    _path = "%s_%s_%s_%s_1.json" % (year, school_id, province_id, type_id)
+    if path.exists(_path):
+        return None
+        
     print(_url)
     response = requests.get(_url)
+    print(response.status_code)
     if response.status_code != 200:
-        print(response.status_code)
-        return None
+        return
     else:
-        return response.json()
-    return None
+        with open(_path, "w") as f:
+            _r = response.json()
+            f.write(json.dumps(_r, indent=2, ensure_ascii=False))
+    return
     
 def _main():
     _schools = _get_schools()
@@ -57,15 +63,9 @@ def _main():
         _ts = list(map(lambda x: x["id"], _t))
         for _s in _schools:
             for _i_ts in _ts:
-                time.sleep(float(random.randint(300, 800))/1000.0)
-                _scores = _get_province_school_score(2022, _p, _s, _i_ts)
-                if _scores:
-                    _scores_array.append(_scores)
-
-    f = open("school_scores.json", "w")
-    f.write(json.dumps(_scores_array, indent=2, ensure_ascii=False))
-    f.close()
-    
+                #time.sleep(float(random.randint(100, 200))/1000.0)
+                _get_province_school_score(2022, _p, _s, _i_ts)
+            
     return
 
 if __name__ == "__main__":
