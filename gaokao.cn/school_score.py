@@ -44,8 +44,11 @@ def _get_province_school_score(year, province_id, school_id, type_id):
     print(_url)
     response = requests.get(_url)
     print(response.status_code)
+    
     if response.status_code != 200:
-        return
+        with open(_path, "w") as f:
+            _r = {}
+            f.write(json.dumps(_r, indent=2, ensure_ascii=False))
     else:
         with open(_path, "w") as f:
             _r = response.json()
