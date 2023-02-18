@@ -2,6 +2,7 @@ import json
 import requests
 import time
 import random
+import path
 
 def _get_schools():
     f = open("name.json")
