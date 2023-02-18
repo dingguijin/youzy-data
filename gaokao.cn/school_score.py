@@ -2,7 +2,7 @@ import json
 import requests
 import time
 import random
-import path
+import os
 
 def _get_schools():
     f = open("name.json")
@@ -38,7 +38,7 @@ def _get_province_school_score(year, province_id, school_id, type_id):
     _url = "https://static-data.gaokao.cn/www/2.0/schoolprovinceindex/%s/%s/%s/%s/1.json" % (year, school_id, province_id, type_id)
 
     _path = "api_json/%s_%s_%s_%s_1.json" % (year, school_id, province_id, type_id)
-    if path.exists(_path):
+    if os.path.exists(_path):
         return None
         
     print(_url)
