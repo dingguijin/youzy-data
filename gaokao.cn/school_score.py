@@ -36,7 +36,7 @@ def _get_provinces_types():
 def _get_province_school_score(year, province_id, school_id, type_id):
     _url = "https://static-data.gaokao.cn/www/2.0/schoolprovinceindex/%s/%s/%s/%s/1.json" % (year, school_id, province_id, type_id)
 
-    _path = "%s_%s_%s_%s_1.json" % (year, school_id, province_id, type_id)
+    _path = "api_json/%s_%s_%s_%s_1.json" % (year, school_id, province_id, type_id)
     if path.exists(_path):
         return None
         
