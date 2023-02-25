@@ -1,3 +1,4 @@
+import sys
 import json
 import requests
 import time
@@ -21,7 +22,7 @@ def _get_provinces():
     ps = x["data"]["province"]
     return ps
 
-def _get_provinces_types():
+def _get_provinces_types(year="2022"):
     f = open("province_control.json")
     x = f.read()
     f.close()
@@ -30,7 +31,7 @@ def _get_provinces_types():
     ps = x["data"]["province"]
     types = x["data"]["type"]
 
-    keys = list(map(lambda p: "%s_2022" % p, ps))
+    keys = list(map(lambda p: "%s_%s" % (p, year), ps))
     ktypes = list(map(lambda k: types[k], keys))
     return ktypes
 
@@ -56,10 +57,14 @@ def _get_province_school_score(year, province_id, school_id, type_id):
     return
     
 def _main():
+    _year = "2022"
+    if len(sys.argv) == 2:
+        _year = sys.argv[1]
+
     _schools = _get_schools()
     print("total schools %d" % len(_schools))
     _provinces = _get_provinces()
-    _types = _get_provinces_types()
+    _types = _get_provinces_types(_year)
 
     _scores_array = []
     for _index, _p in enumerate(_provinces):
@@ -68,7 +73,7 @@ def _main():
         for _s in _schools:
             for _i_ts in _ts:
                 #time.sleep(float(random.randint(100, 200))/1000.0)
-                _get_province_school_score(2022, _p, _s, _i_ts)
+                _get_province_school_score(_year, _p, _s, _i_ts)
             
     return
 
