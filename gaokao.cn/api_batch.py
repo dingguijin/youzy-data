@@ -1,9 +1,8 @@
 import json
 import os
 
-def get_batches(province_id, school_id, local_type, year=2022):
-    _score_path = "api-json/score/api-json/%s_%s_%s_%s_1.json" % (year, school_id,
-                                                                  province_id, local_type)
+def get_batches(province_id, school_id, local_type, year="2022"):
+    _score_path = "api-school-score/%s/%s_%s_%s_%s_1.json" % (year, year, school_id, province_id, local_type)
     
     if not os.path.exists(_score_path):
         return None
