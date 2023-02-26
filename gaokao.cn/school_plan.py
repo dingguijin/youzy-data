@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import time
 import random
@@ -9,22 +10,26 @@ from api_province import get_provinces_types
 from api_batch import get_batches
 from api_url import get_special_plan_url
 
-def _json_write(_school, _province, _local_type, _batch, d):
-    _plan_json_path = "api-plan/%s_%s_%s_%s.json" % (_school, _province, _local_type, _batch)
+def _json_write(_year, _school, _province, _local_type, _batch, d):
+    _plan_json_path = "api-plan/%s/api-plan/%s_%s_%s_%s.json" % (_year, _school, _province, _local_type, _batch)
     _plan = json.dumps(d, indent=2, ensure_ascii=False)
     with open(_plan_json_path, "w") as _f:
         _f.write(_plan)
     return
 
-def _json_exists(_school, _province, _local_type, _batch):
-    _plan_json_path = "api-plan/%s_%s_%s_%s.json" % (_school, _province, _local_type, _batch)
+def _json_exists(_year, _school, _province, _local_type, _batch):
+    _plan_json_path = "api-plan/%s/api-plan/%s_%s_%s_%s.json" % (_year, _school, _province, _local_type, _batch)
     if os.path.exists(_plan_json_path):
         return True
     return False
     
 def _main():
+    _year = "2022"
+    if len(sys.argv) == 2:
+        _year = sys.argv[1]
+
     _schools = get_schools_ids()
-    _types = get_provinces_types()
+    _types = get_provinces_types(_year)
 
     for _school in _schools:
         print("school: %s" % _school)
@@ -34,11 +39,11 @@ def _main():
             _province_types = _types[_province]
             for _type in _province_types:
                 _local_type = _type["id"]
-                _batches = get_batches(_province, _school, _local_type)
+                _batches = get_batches(_province, _school, _local_type, _year)
                 if not _batches:
                     continue
                 for _batch in _batches:
-                    if _json_exists(_school, _province, _local_type, _batch):
+                    if _json_exists(_year, _school, _province, _local_type, _batch):
                         continue
 
                     _headers = {
@@ -54,7 +59,7 @@ def _main():
                                                     _province,
                                                     _local_type,
                                                     _batch,
-                                                    2022,
+                                                    _year,
                                                     _size,
                                                     _page)
                         print(_url)
@@ -78,7 +83,7 @@ def _main():
                             
                             
                     if _r_jsons:
-                        _json_write(_school, _province, _local_type, _batch, _r_jsons)
+                        _json_write(_year, _school, _province, _local_type, _batch, _r_jsons)
                     
                 
     return
