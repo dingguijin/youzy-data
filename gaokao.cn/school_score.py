@@ -71,8 +71,9 @@ def _main():
         _t = _types[_index]
         _ts = list(map(lambda x: x["id"], _t))
         for _s in _schools:
+            print("school id: %s" % _s)
             for _i_ts in _ts:
-                #time.sleep(float(random.randint(100, 200))/1000.0)
+                time.sleep(float(random.randint(100, 200))/1000.0)
                 _get_province_school_score(_year, _p, _s, _i_ts)
             
     return
