@@ -8,6 +8,7 @@ from api_school import get_schools_ids
 from api_province import get_provinces_types
 from api_batch import get_batches
 from api_url import get_special_plan_url
+from api_url import get_special_score_url
 
 def _json_write(_school, _province, _local_type, _batch, d):
     _plan_json_path = "api-sp-score/%s_%s_%s_%s.json" % (_school, _province, _local_type, _batch)
@@ -37,6 +38,7 @@ def _main():
                 _batches = get_batches(_province, _school, _local_type)
                 if not _batches:
                     continue
+
                 for _batch in _batches:
                     if _json_exists(_school, _province, _local_type, _batch):
                         continue
