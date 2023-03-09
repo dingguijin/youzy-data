@@ -35,6 +35,12 @@ def _get_provinces_types(year="2022"):
     ktypes = list(map(lambda k: types[k], keys))
     return ktypes
 
+def _score_existed(year, province_id, school_id, type_id):
+    _path = "api-school-score/%s/%s_%s_%s_%s_1.json" % (year, year, school_id, province_id, type_id)
+    if os.path.exists(_path):
+        return True
+    return False
+
 def _get_province_school_score(year, province_id, school_id, type_id):
     _url = "https://static-data.gaokao.cn/www/2.0/schoolprovinceindex/%s/%s/%s/%s/1.json" % (year, school_id, province_id, type_id)
 
@@ -73,6 +79,8 @@ def _main():
         for _s in _schools:
             print("school id: %s" % _s)
             for _i_ts in _ts:
+                if _score_existed(_year, _p, _s, _i_ts):
+                    continue
                 time.sleep(float(random.randint(100, 200))/1000.0)
                 _get_province_school_score(_year, _p, _s, _i_ts)
             
