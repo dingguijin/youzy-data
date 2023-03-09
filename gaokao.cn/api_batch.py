@@ -9,6 +9,7 @@ def get_batches(province_id, school_id, local_type, year="2022"):
     
     f = open(_score_path)
     x = f.read()
+    x = x.replace("null", "\"\"")
     f.close()
     x = eval(x)
 
